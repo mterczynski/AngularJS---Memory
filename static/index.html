@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="gameApp">
+<head>
+    <!-- <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <title>Memory game</title>
+    <script src="angularjs.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-route.min.js"></script>
+    <script>
+        const app = angular.module("gameApp", ["ngRoute"]);
+        app.controller("gameController", function($scope, $location){
+            $scope.test = "lola"
+            console.log($location.path());
+        });
+        app.config(($routeProvider)=>{
+            $routeProvider
+            .when("/",{
+                templateUrl:"main.html"
+            }).when("/tryb/30",{
+                templateUrl:"game.html",
+                controller: "gameController"
+            }).when("/tryb/60",{
+                templateUrl:"game.html",
+                controller: "gameController"
+            }).when("/tryb/90",{
+                templateUrl:"game.html",
+                controller: "gameController"
+            })
+            .otherwise({
+                redirectTo: "/"
+            })
+        });
+    </script>
+</head>
+<body ng-controller="gameController">
+    <div ng-view></div>
+    Nie działa
+</body>
+</html>
