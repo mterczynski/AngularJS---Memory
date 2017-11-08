@@ -1,3 +1,3 @@
 # AngularJS memory game
 
-School project
+School project, learning AngularJS: routing, directives.
