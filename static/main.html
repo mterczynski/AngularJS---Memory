@@ -1,1 +1,45 @@
-<div>Main</div>
+<style>
+    *{
+        font-family: Calibri;
+    }
+    .backToMenu{
+        position: relative;
+        width:calc(404px - 40px);
+        padding:20px;
+        text-align: center;
+        border:3px solid black;
+        margin-top:20px;
+        cursor: pointer;
+        border-radius: 12px;
+        font-size:32px;
+        font-family: Calibri;
+    }
+    .info{
+        font-size: 32px;
+        margin: 20px 0 20px 0;
+        text-align: center;
+        width: calc(404px - 40px);
+    }
+</style>
+
+<div ng-controller="gameController">
+    <!-- <div class="info">
+        Tryb gry: <span ng-bind="time"></span>s<br>
+        Pozostały czas: <span></span>
+
+
+        <div class="timeLeftBar" ng-if="isTimeLeft">{{timeLeftString}}</div>
+    </div>    
+
+    <div ng-repeat="i in field" class="board">
+        <div ng-repeat="j in i track by $index" class="imgRow" style="display:inline-block;">
+            <img src="img/{{j}}.jpg" alt="" style="display:inline-block; height:102px; width:102px;">
+        </div>
+    </div>
+
+    <div class="backToMenu" ng-click="backToMenu()">Powrót</div> -->
+    <game></game>
+</div>
+
+
+

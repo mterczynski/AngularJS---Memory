@@ -1,0 +1,19 @@
+<div class="info">
+    Tryb gry: <span ng-bind="time"></span>s<br>
+    Pozostały czas: <span></span>
+
+    <div class="timeLeftBar">
+        <!-- <div class="timeLeftBar__color" ng-if="isTimeLeft" style="width: {{barPercentage}}%;" >{{timeLeftString}}</div> -->
+        <div class="timeLeftBar__color" ng-if="isTimeLeft" ng-style="progressBarStyle" ></div>
+        <div class="timeLeftBar__timeLeft">{{timeLeftString}}</div>
+        
+    </div>
+</div>    
+
+<div ng-repeat="i in field" class="board">
+    <div ng-repeat="j in i track by $index" class="imgRow" style="display:inline-block;">
+        <img src="img/{{j}}.jpg" alt="" style="display:inline-block; height:102px; width:102px;">
+    </div>
+</div> 
+
+<div class="backToMenu" ng-click="backToMenu()">Powrót</div>
