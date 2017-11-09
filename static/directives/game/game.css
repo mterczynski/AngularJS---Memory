@@ -1,3 +1,7 @@
+* {
+    font-family: Calibri;
+}
+
 game .timeLeftBar{
     position: relative;
     width: calc(404px - 40px);
@@ -13,11 +17,34 @@ game .timeLeftBar__color{
     top:0;
     width: 100%;
     height: 100%;
-    background-color: rgb(192, 192, 192);
 }
 
 game .timeLeftBar__timeLeft{
     position: relative;
     text-align: center;  
+}
+
+game .backToMenu{
+    position: relative;
+    width:calc(404px - 40px);
+    padding:20px;
+    text-align: center;
+    border:3px solid black;
+    margin-top:20px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-size:32px;
+    font-family: Calibri;
+    margin-left: 5px;
+}
+game .info{
+    font-size: 32px;
+    margin: 20px 0 20px 0;
+    text-align: center;
+    width: calc(404px - 40px);
+}
+
+game img{
+    margin: 5px;
 }
 

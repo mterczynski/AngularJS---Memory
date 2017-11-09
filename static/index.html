@@ -9,87 +9,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-route.min.js"></script>
     <script>
         
-        function shuffle(a) {
-            var j, x, i;
-            for (i = a.length - 1; i > 0; i--) {
-                j = Math.floor(Math.random() * (i + 1));
-                x = a[i];
-                a[i] = a[j];
-                a[j] = x;
-            }
-        }
-        function generateField(){
-            let unusedValues = [];
-            for(let i=1; i<=8; i++){
-                unusedValues.push(i);
-                unusedValues.push(i);
-            }
-            shuffle(unusedValues);
-
-            let field = [];
-            for(let i=0; i<4; i++){
-                let row = [];
-                for(let j=0; j<4; j++){
-                    row.push(unusedValues[i*4 + j]);
-                }
-                field.push(row);
-            }
-            return field;
-        }
-
         const app = angular.module("gameApp", ["ngRoute"]);
 
         const mainController = app.controller("mainController", function($scope, $location, $interval){
-
-            // $scope.backToMenu = ()=>{
-            //     $location.path("/");
-            // }
-
-            // function start(){
-            //     $scope.timeLeftString = "00:30:000";
-            //     $scope.isTimeLeft = true;
-
-            //     const startDate = new Date().getTime() + 1000 * 40; // add 30 seconds
-            //     const gameInterval = $interval(()=>{
-            //         let newDate = new Date(startDate - new Date().getTime());
-                    
-            //         let seconds = newDate.getSeconds() + "";
-            //         let milliseconds = newDate.getMilliseconds() + "";
-            //         let minutes = newDate.getMinutes() + "";
-            //         if(seconds.length == 1){
-            //             seconds = "0" + seconds;
-            //         }
-            //         if(milliseconds.length == 1){
-            //             milliseconds = "00" + milliseconds;
-            //         } 
-            //         else if(milliseconds.length == 2){
-            //             milliseconds = "0" + milliseconds;
-            //         }
-            //         if(minutes.length == 1){
-            //             minutes = "0" + minutes;
-            //         }
-                    
-            //         $scope.timeLeftString = `${minutes}:${seconds}:${milliseconds}`;
-            //         if(newDate.getTime() <= 0){
-            //             $interval.cancel(gameInterval);
-            //             $scope.isTimeLeft = false;
-            //             //alert('Time is up!');
-            //         }
-            //     },1);
-            // }
-
-            // let holder = generateField();
-            // $scope.field = generateField();
-            // $scope.$on('$routeChangeStart', function (next, last) {
-            //     let time = last.originalPath.split("/tryb/")[1];
-
-            //     // if(time == undefined){
-            //     //     console.warn("Warn: No game time provided");
-            //     // } else {
-            //     //     //$scope.time = time;
-            //     //     //start();
-            //     // }
-            // });        
         });
 
         app.config(($routeProvider)=>{
@@ -98,6 +20,8 @@
                 templateUrl:"chooseMode.html"
             })
             .when("/tryb/30",{
+                // template:"<game></game>",
+                //css:"directives/game/game.css",
                 templateUrl:"main.html",
                 controller: "mainController"
             })
@@ -119,6 +43,7 @@
     <!-- Directives: -->
     <script src="directives/game/game.js"></script>
     <link rel="stylesheet" href="directives/game/game.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
 
 </head>
 <body ng-controller="mainController">
