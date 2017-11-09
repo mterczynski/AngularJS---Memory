@@ -12,3 +12,8 @@
 </div> 
 
 <div class="backToMenu" ng-click="backToMenu()">Powrót</div>
+
+<div class="alert" ng-if="isAlertVisible" >
+    <span>{{alertContent}}</span>
+    <button ng-click="hideAlert()">Ok</button>
+</div>

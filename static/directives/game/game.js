@@ -1,16 +1,17 @@
 let gameController = app.controller("gameController", function($scope, $location, $interval, $timeout){
 
+    $scope.alertContent;            // string
     $scope.areUserActionsBlocked;   // :boolean
     $scope.barPercentage;           // from 0 to 100
     $scope.field;                   // array 4x4 of image IDs
     $scope.firstSelection;          // {posX, posY, image, imageId} || null
     $scope.gameModeTime;            // 30 or 60 or 90
     $scope.gameInterval;            // interval for timer
-    $scope.hasGameStarted;           // :boolean
+    $scope.hasGameStarted;          // :boolean
+    $scope.isAlertVisible;          // :boolean
     $scope.isTimeLeft;              // true or false
-    $scope.lockedImagesPositions;
+    $scope.lockedImagesPositions;   // array of {posX, posY}
     $scope.progressBarStyle;        // {width: "100%", backgroundColor:"rgb(192,192,192)" }
-    // $scope.revealedImages;          // array 4x4 with false or true in every cell
     $scope.timeLeftString;          // "00:30:000"  
     
     $scope.backToMenu = ()=>{
@@ -18,6 +19,9 @@ let gameController = app.controller("gameController", function($scope, $location
         $location.path("/");
     }
 
+    $scope.hideAlert = () =>{
+        $scope.isAlertVisible = false;
+    }
     $scope.onImageClicked = (posX, posY, imageId, event)=>{
         console.log("posX: " + posX);
         console.log("posY: " + posY);
@@ -28,7 +32,9 @@ let gameController = app.controller("gameController", function($scope, $location
         if(!$scope.hasGameStarted){
             start();            
         }
-
+        if($scope.areUserActionsBlocked){
+            return;
+        }
         // check if user clicked on non-revealed image:
         let isClickedImageRevealed = false;
         $scope.lockedImagesPositions.forEach((lockedPosition)=>{
@@ -42,37 +48,34 @@ let gameController = app.controller("gameController", function($scope, $location
         } // <<< end of check
 
         if($scope.firstSelection){ 
-            console.log("user clicked for the second time");
-
+            // console.log("user clicked for the second time");
             if(!($scope.firstSelection.posX == posX && $scope.firstSelection.posY == posY)){
-
-                console.log("user clicked on different image");
-
+                // console.log("user clicked on different image than first selection");
                 event.target.src = `img/${imageId}.jpg`;
-
-                console.log(event.target);
+                // console.log(event.target);
                 if($scope.firstSelection.imageId == imageId){        
-                    console.log("image ID's are the same");
-                    //block revealed images from any actions:
+                    // console.log("image IDs are the same");
                     $scope.lockedImagesPositions.push({posX, posY});
                     $scope.lockedImagesPositions.push({posX: $scope.firstSelection.posX, posY: $scope.firstSelection.posY});
                     $scope.firstSelection = null;
-
-                    // check if user won:
-                    if($scope.lockedImagesPositions.length == 16){
-                        alert("Wygrałeś!");
-                        // TODO: przyciemninoy ekran, zjezdza napis bialy z gory "Wygrałeś.<br> Twój czas to: ${timeString}.".
+                    if($scope.lockedImagesPositions.length == 16){ // user won
+                        // TODO: przyciemniony ekran, zjezdza napis bialy z gory "Wygrałeś.<br> Twój czas to: ${timeString}.".
                         // po kliknieciu znika.
+                        const userTime = $scope.timeLeftString;
+                        clearGameVariables();
+                        $scope.isAlertVisible = true;
+                        $scope.alertContent = `Wygrałeś! Twój czas to: ${userTime}.`;
                     }
-
                 } else {
                     // block user actions for 500ms, then unreveal both images
                     $scope.areUserActionsBlocked = true;
                     $timeout(()=>{
-                        $scope.areUserActionsBlocked = false;
-                        event.target.src = `img/0.jpg`;
-                        $scope.firstSelection.image.src = `img/0.jpg`;
-                        $scope.firstSelection = null;
+                        try{
+                            $scope.areUserActionsBlocked = false;
+                            event.target.src = `img/0.jpg`;
+                            $scope.firstSelection.image.src = `img/0.jpg`;
+                            $scope.firstSelection = null;
+                        } catch(error) {}
                     }, 500);
                 }
             } else {
@@ -120,6 +123,7 @@ let gameController = app.controller("gameController", function($scope, $location
     function clearGameVariables(){
         $interval.cancel($scope.gameInterval);
 
+        $scope.alertContent = "";
         $scope.areUserActionsBlocked = false;
         $scope.barPercentage = 100;
         $scope.field = generateField();
@@ -127,18 +131,18 @@ let gameController = app.controller("gameController", function($scope, $location
         $scope.gameModeTime = $location.$$url.split("/tryb/")[1];
         $scope.gameInterval = null;
         $scope.hasGameStarted = false;
+        $scope.isAlertVisible = false;
         $scope.isTimeLeft = true;
         $scope.lockedImagesPositions = []; 
         $scope.progressBarStyle = {
             width: $scope.barPercentage  + "%",
             backgroundColor: "rgb(192,192,192)"
         }
-        // $scope.revealedImages = new Array(4).fill(new Array(4).fill(false));
         $scope.timeLeftString = `00:${$scope.gameModeTime}:000`;
     }
     function start(){
-        clearGameVariables();
-        const startDate = new Date().getTime() + 1000 * $scope.gameModeTime; // add 30 seconds
+        // clearGameVariables();
+        const startDate = new Date().getTime() + 1000 * $scope.gameModeTime;
         $scope.hasGameStarted = true;
         $scope.gameInterval = $interval(()=>{
             let newDate = new Date(startDate - new Date().getTime());
@@ -155,12 +159,15 @@ let gameController = app.controller("gameController", function($scope, $location
                 $scope.progressBarStyle.backgroundColor = "rgb(240, 130, 130)";
             }
 
+            //  console.log(newDate.getTime() <= 15000);
             if(newDate.getTime() <= 0){
-                $interval.cancel(gameInterval);
+                // $interval.cancel(gameInterval);
+                clearGameVariables();
                 $scope.isTimeLeft = false;
-                alert('Game over!'); // todo html alert
+                $scope.isAlertVisible = true;
+                $scope.alertContent = "Czas upłynął :(";
             }
-        },100);
+        },1);
     }
 
     clearGameVariables();
