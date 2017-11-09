@@ -1,0 +1,5 @@
+<div ng-repeat="(indexY, row) in field" class="board">
+    <div ng-repeat="(indexX, imageId) in row track by $index" class="imgRow" style="display:inline-block;">
+        <img src="img/0.jpg" ng-click="onImageClicked(indexX, indexY, imageId, $event)" alt="" style="display:inline-block; height:102px; width:102px;">
+    </div>
+</div> 
