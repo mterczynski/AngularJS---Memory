@@ -177,7 +177,7 @@ let gameController = app.controller("gameController", function($scope, $location
 gameController.directive('game', function() {
     return { 
         templateUrl: 'directives/game/game.html',
-        restricts: 'A',
+        restricts: 'EA',
         css: 'directives/game/game.css'
     };
 });
