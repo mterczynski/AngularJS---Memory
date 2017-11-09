@@ -2,7 +2,7 @@ let timeController = app.controller("timeController", function($scope, $location
     $scope.progressBarStyle;        // {width: "100%", backgroundColor:"rgb(192,192,192)" }
     $scope.timeLeftString;          // "00:30:000"  
 
-    console.log($scope.mode);
+    console.log($scope.gameModeTime);
 
     const startDate = new Date().getTime() + 1000 * $scope.gameModeTime;
 
@@ -22,7 +22,11 @@ let timeController = app.controller("timeController", function($scope, $location
         }
 
         if(newDate.getTime() <= 0){
-            // game over
+            // $interval.cancel(gameInterval);
+            //clearGameVariables();
+            $scope.isTimeLeft = false;
+            $scope.isAlertVisible = true;
+            $scope.alertContent = "Czas upłynął :(";
         }
     },1);
 
@@ -34,8 +38,5 @@ timeController.directive('timer', function() {
         templateUrl: 'directives/timer/timer.html',
         restricts: 'ACE',
         css: 'directives/timer/timer.css',
-        scope:{
-            mode: "=mode"
-        }
     };
 });

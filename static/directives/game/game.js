@@ -144,30 +144,30 @@ let gameController = app.controller("gameController", function($scope, $location
         // clearGameVariables();
         const startDate = new Date().getTime() + 1000 * $scope.gameModeTime;
         $scope.hasGameStarted = true;
-        $scope.gameInterval = $interval(()=>{
-            let newDate = new Date(startDate - new Date().getTime());
+        // $scope.gameInterval = $interval(()=>{
+        //     let newDate = new Date(startDate - new Date().getTime());
 
-            let seconds = ("0" + newDate.getSeconds()).slice(-2);
-            let milliseconds =  ("00" + newDate.getMilliseconds()).slice(-3);
-            let minutes = ("0" + newDate.getMinutes()).slice(-2);
+        //     let seconds = ("0" + newDate.getSeconds()).slice(-2);
+        //     let milliseconds =  ("00" + newDate.getMilliseconds()).slice(-3);
+        //     let minutes = ("0" + newDate.getMinutes()).slice(-2);
 
-            $scope.timeLeftString = `${minutes}:${seconds}:${milliseconds}`;
-            $scope.barPercentage = (newDate.getTime()/(1000 * $scope.gameModeTime) * 100).toFixed(2);
-            $scope.progressBarStyle.width = $scope.barPercentage  + "%";
+        //     $scope.timeLeftString = `${minutes}:${seconds}:${milliseconds}`;
+        //     $scope.barPercentage = (newDate.getTime()/(1000 * $scope.gameModeTime) * 100).toFixed(2);
+        //     $scope.progressBarStyle.width = $scope.barPercentage  + "%";
 
-            if($scope.barPercentage <= 80){
-                $scope.progressBarStyle.backgroundColor = "rgb(240, 130, 130)";
-            }
+        //     if($scope.barPercentage <= 80){
+        //         $scope.progressBarStyle.backgroundColor = "rgb(240, 130, 130)";
+        //     }
 
-            //  console.log(newDate.getTime() <= 15000);
-            if(newDate.getTime() <= 0){
-                // $interval.cancel(gameInterval);
-                clearGameVariables();
-                $scope.isTimeLeft = false;
-                $scope.isAlertVisible = true;
-                $scope.alertContent = "Czas upłynął :(";
-            }
-        },1);
+        //     //  console.log(newDate.getTime() <= 15000);
+        //     if(newDate.getTime() <= 0){
+        //         // $interval.cancel(gameInterval);
+        //         clearGameVariables();
+        //         $scope.isTimeLeft = false;
+        //         $scope.isAlertVisible = true;
+        //         $scope.alertContent = "Czas upłynął :(";
+        //     }
+        // },1);
     }
 
     clearGameVariables();

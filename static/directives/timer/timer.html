@@ -2,3 +2,8 @@
     <div class="timeLeftBar__color" ng-style="progressBarStyle"></div>
     <div class="timeLeftBar__timeLeft">{{timeLeftString}}</div>        
 </div>
+
+<div class="alert" ng-if="isAlertVisible" >
+    <span>{{alertContent}}</span>
+    <button ng-click="hideAlert()">Ok</button>
+</div>
