@@ -143,21 +143,9 @@ let gameController = app.controller("gameController", function($scope, $location
         $scope.gameInterval = $interval(()=>{
             let newDate = new Date(startDate - new Date().getTime());
 
-            let seconds = newDate.getSeconds() + "";
-            let milliseconds = newDate.getMilliseconds() + "";
-            let minutes = newDate.getMinutes() + "";
-            if(seconds.length == 1){
-                seconds = "0" + seconds;
-            }
-            if(milliseconds.length == 1){
-                milliseconds = "00" + milliseconds;
-            } 
-            else if(milliseconds.length == 2){
-                milliseconds = "0" + milliseconds;
-            }
-            if(minutes.length == 1){
-                minutes = "0" + minutes;
-            }
+            let seconds = ("0" + newDate.getSeconds()).slice(-2);
+            let milliseconds =  ("00" + newDate.getMilliseconds()).slice(-3);
+            let minutes = ("0" + newDate.getMinutes()).slice(-2);
 
             $scope.timeLeftString = `${minutes}:${seconds}:${milliseconds}`;
             $scope.barPercentage = (newDate.getTime()/(1000 * $scope.gameModeTime) * 100).toFixed(2);
