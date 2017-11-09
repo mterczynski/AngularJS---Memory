@@ -59,12 +59,10 @@ let gameController = app.controller("gameController", function($scope, $location
                     $scope.lockedImagesPositions.push({posX: $scope.firstSelection.posX, posY: $scope.firstSelection.posY});
                     $scope.firstSelection = null;
                     if($scope.lockedImagesPositions.length == 16){ // user won
-                        // TODO: przyciemniony ekran, zjezdza napis bialy z gory "Wygrałeś.<br> Twój czas to: ${timeString}.".
-                        // po kliknieciu znika.
                         const userTime = $scope.timeLeftString;
                         clearGameVariables();
                         $scope.isAlertVisible = true;
-                        $scope.alertContent = `Wygrałeś! Twój czas to: ${userTime}.`;
+                        $scope.alertContent = `Wygrałeś! Pozostały czas to: ${userTime}.`;
                     }
                 } else {
                     // block user actions for 500ms, then unreveal both images
@@ -88,7 +86,6 @@ let gameController = app.controller("gameController", function($scope, $location
                 imageId,
                 image: event.target
             }
-            // TODO add animation to reveal image:
             event.target.src = `img/${imageId}.jpg`;
         }   
     }
