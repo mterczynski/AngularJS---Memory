@@ -1,8 +1,9 @@
-<div class="info">
-    <div class="timeLeftBar" ng-if="hasGameStarted">
+<div class="info" ng-controller="timeController as timeC">
+    <!-- <div class="timeLeftBar" ng-if="hasGameStarted">
         <div class="timeLeftBar__color" ng-style="progressBarStyle"></div>
         <div class="timeLeftBar__timeLeft">{{timeLeftString}}</div>        
-    </div>
+    </div> -->
+    <timer mode="45"></timer>
 </div>    
 
 <div ng-repeat="(indexY, row) in field" class="board">
