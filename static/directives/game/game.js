@@ -1,18 +1,18 @@
-let gameController = app.controller("gameController", function($scope, $location, $interval, $timeout){
+let gameController = app.controller("gameController", function($scope, $location, $interval, $timeout, $rootScope){
 
     $scope.alertContent;            // string
     $scope.areUserActionsBlocked;   // :boolean
-    $scope.barPercentage;           // from 0 to 100
+    $rootScope.barPercentage;           // from 0 to 100
     $scope.field;                   // array 4x4 of image IDs
     $scope.firstSelection;          // {posX, posY, image, imageId} || null
-    $scope.gameModeTime;            // 30 or 60 or 90
-    $scope.gameInterval;            // interval for timer
-    $scope.hasGameStarted;          // :boolean
+    $rootScope.gameModeTime;            // 30 or 60 or 90
+    $rootScope.gameInterval;            // interval for timer
+    $rootScope.hasGameStarted;          // :boolean
     $scope.isAlertVisible;          // :boolean
-    $scope.isTimeLeft;              // true or false
+    $rootScope.isTimeLeft;              // true or false
     $scope.lockedImagesPositions;   // array of {posX, posY}
-    $scope.progressBarStyle;        // {width: "100%", backgroundColor:"rgb(192,192,192)" }
-    $scope.timeLeftString;          // "00:30:000"  
+    $rootScope.progressBarStyle;        // {width: "100%", backgroundColor:"rgb(192,192,192)" }
+    $rootScope.timeLeftString;          // "00:30:000"  
     
     $scope.backToMenu = ()=>{
         $interval.cancel($scope.gameInterval);
@@ -29,8 +29,8 @@ let gameController = app.controller("gameController", function($scope, $location
         console.log(event.target);
 
         // start game if not started:
-        if(!$scope.hasGameStarted){
-            start();            
+        if(!$rootScope.hasGameStarted){
+            $rootScope.start();            
         }
         if($scope.areUserActionsBlocked){
             return;
@@ -60,7 +60,7 @@ let gameController = app.controller("gameController", function($scope, $location
                     $scope.firstSelection = null;
                     if($scope.lockedImagesPositions.length == 16){ // user won
                         const userTime = $scope.timeLeftString;
-                        clearGameVariables();
+                        $rootScope.clearGameVariables();
                         $scope.isAlertVisible = true;
                         $scope.alertContent = `Wygrałeś! Pozostały czas to: ${userTime}.`;
                     }
@@ -117,64 +117,35 @@ let gameController = app.controller("gameController", function($scope, $location
         }
         return field;
     }
-    function clearGameVariables(){
-        $interval.cancel($scope.gameInterval);
+    $rootScope.clearGameVariables = ()=>{
+        $interval.cancel($rootScope.gameInterval);
 
         $scope.alertContent = "";
         $scope.areUserActionsBlocked = false;
-        $scope.barPercentage = 100;
+        $rootScope.barPercentage = 100;
         $scope.field = generateField();
         $scope.firstSelection = null;
-        $scope.gameModeTime = $location.$$url.split("/tryb/")[1];
-        $scope.gameInterval = null;
-        $scope.hasGameStarted = false;
+        $rootScope.gameModeTime = $location.$$url.split("/tryb/")[1];
+        $rootScope.gameInterval = null;
+        $rootScope.hasGameStarted = false;
         $scope.isAlertVisible = false;
-        $scope.isTimeLeft = true;
+        $rootScope.isTimeLeft = true;
         $scope.lockedImagesPositions = []; 
-        $scope.progressBarStyle = {
-            width: $scope.barPercentage  + "%",
+        $rootScope.progressBarStyle = {
+            width: $rootScope.barPercentage  + "%",
             backgroundColor: "rgb(192,192,192)"
         }
-        $scope.timeLeftString = `00:${$scope.gameModeTime}:000`;
-    }
-    function start(){
-        // clearGameVariables();
-        const startDate = new Date().getTime() + 1000 * $scope.gameModeTime;
-        $scope.hasGameStarted = true;
-        $scope.gameInterval = $interval(()=>{
-            let newDate = new Date(startDate - new Date().getTime());
-
-            let seconds = ("0" + newDate.getSeconds()).slice(-2);
-            let milliseconds =  ("00" + newDate.getMilliseconds()).slice(-3);
-            let minutes = ("0" + newDate.getMinutes()).slice(-2);
-
-            $scope.timeLeftString = `${minutes}:${seconds}:${milliseconds}`;
-            $scope.barPercentage = (newDate.getTime()/(1000 * $scope.gameModeTime) * 100).toFixed(2);
-            $scope.progressBarStyle.width = $scope.barPercentage  + "%";
-
-            if($scope.barPercentage <= 80){
-                $scope.progressBarStyle.backgroundColor = "rgb(240, 130, 130)";
-            }
-
-            //  console.log(newDate.getTime() <= 15000);
-            if(newDate.getTime() <= 0){
-                // $interval.cancel(gameInterval);
-                clearGameVariables();
-                $scope.isTimeLeft = false;
-                $scope.isAlertVisible = true;
-                $scope.alertContent = "Czas upłynął :(";
-            }
-        },1);
+        $rootScope.timeLeftString = `00:${$rootScope.gameModeTime}:000`;
     }
 
-    clearGameVariables();
+    $rootScope.clearGameVariables();
 
-    if(!$scope.gameModeTime){
+    if(!$rootScope.gameModeTime){
         console.warn("Warn: No game time provided");
     }
 });
 
-gameController.directive('game', function() {
+gameController.directive('game', function($rootScope, $interval) {
     return { 
         templateUrl: 'directives/game/game.html',
         restricts: 'EA',
